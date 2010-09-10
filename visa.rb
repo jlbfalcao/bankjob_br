@@ -8,7 +8,7 @@ require 'activesupport'
 class VisaScraper < BaseScraper
 
   currency "BRL"
-  decimal "."
+  decimal ","
   account_number  'Visa'
   account_type 'CREDITCARD'
 
@@ -80,9 +80,11 @@ class VisaScraper < BaseScraper
         t.amount.gsub(/\./, '')
 
         p t.to_s
+        
         statement.add_transaction t
       end
     end
+    statement.finish false
     statement
   end
 

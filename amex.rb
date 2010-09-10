@@ -59,6 +59,7 @@ class VisaScraper < BaseScraper
         p e
       end
     end
+    statement.finish false
     statement
   end
 end
