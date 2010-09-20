@@ -3,7 +3,6 @@ require 'rubygems'
 require 'bankjob'      # this require will pull in all the classes we need
 require 'base_scraper' # this defines scraper that BpiScraper extends
 
-require 'activesupport'
 
 class VisaScraper < BaseScraper
 
@@ -19,10 +18,12 @@ class VisaScraper < BaseScraper
     if tx.raw_description =~ regex
       m = tx.raw_description.match(regex)
       # compra é parcelada e feita no passado
-      tx.date = tx.date.prev_year if tx.date.future?
+      puts tx.date.class
+      tx.date = (DateTime.parse(tx.date.to_s) << 12) if tx.date > Time.new
 
       tx.raw_description.gsub!(regex, " - #{m[1]} de #{m[2]} em #{tx.date.strftime('%d/%m/%Y')}")
-      tx.date = tx.date.months_since(m[1].to_i-1)
+      tx.date =  (DateTime.parse(tx.to_s) >> (m[1].to_i-1))
+      # tx.date = tx.date.months_since(m[1].to_i-1)
     end
   end
   
